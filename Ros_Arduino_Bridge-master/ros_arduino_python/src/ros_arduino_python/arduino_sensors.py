@@ -236,76 +236,7 @@ class PointCloudPing(PointCloudRangeSensor):
         # Convert it to meters for ROS
         distance = cm / 100.0
         return distance
-        
-class GP2D12(IRSensor):
-    def __init__(self, *args, **kwargs):
-        super(GP2D12, self).__init__(*args, **kwargs)
-        
-        self.msg.field_of_view = 0.001
-        self.msg.min_range = 0.10
-        self.msg.max_range = 0.80
-        
-    def read_value(self):
-        value = self.controller.analog_read(self.pin)
-        
-        if value <= 3.0:
-            return self.msg.max_range
-        
-        try:
-            distance = (6787.0 / (float(value) - 3.0)) - 4.0
-        except:
-            return self.msg.max_range
-            
-        # Convert to meters
-        distance /= 100.0
-        
-        # If we get a spurious reading, set it to the max_range
-        if distance > self.msg.max_range: distance = self.msg.max_range
-        if distance < self.msg.min_range: distance = self.msg.max_range
-        
-        return distance
     
-class PololuMotorCurrent(AnalogFloatSensor):
-    def __init__(self, *args, **kwargs):
-        super(PololuMotorCurrent, self).__init__(*args, **kwargs)
-        
-    def read_value(self):
-        # From the Pololu source code
-        milliamps = self.controller.analog_read(self.pin) * 34
-        return milliamps / 1000.0
-    
-class PhidgetsVoltage(AnalogFloatSensor):
-    def __init__(self, *args, **kwargs):
-        super(PhidgetsVoltage, self).__init__(*args, **kwargs)
-        
-    def read_value(self):
-        # From the Phidgets documentation
-        voltage = 0.06 * (self.controller.analog_read(self.pin) - 500.)
-        return voltage
-    
-class PhidgetsCurrent(AnalogFloatSensor):
-    def __init__(self, *args, **kwargs):
-        super(PhidgetsCurrent, self).__init__(*args, **kwargs)
-        
-    def read_value(self):
-        # From the Phidgets documentation for the 20 amp DC sensor
-        current = 0.05 * (self.controller.analog_read(self.pin) - 500.)
-        return current
-    
-class MaxEZ1Sensor(SonarSensor):
-    def __init__(self, *args, **kwargs):
-        super(MaxEZ1Sensor, self).__init__(*args, **kwargs)
-        
-        self.trigger_pin = kwargs['trigger_pin']
-        self.output_pin = kwargs['output_pin']
-        
-        self.msg.field_of_view = 0.785398163
-        self.msg.min_range = 0.02
-        self.msg.max_range = 3.0
-        
-    def read_value(self):
-        return self.controller.get_MaxEZ1(self.trigger_pin, self.output_pin)
-
             
 if __name__ == '__main__':
     myController = Controller()

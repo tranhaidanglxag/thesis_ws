@@ -20,7 +20,6 @@
     http://www.gnu.org/licenses/gpl.html
 
 """
-
 import thread
 from math import pi as PI, degrees, radians
 import os
@@ -33,11 +32,15 @@ SERVO_MAX = 180
 SERVO_MIN = 0
 
 class Arduino:
-    ''' Configuration Parameters
+    '''
+    This class have classmethod to communicate with Arduino 
+    Configuration Parameters
     '''    
-    N_ANALOG_PORTS = 6
-    N_DIGITAL_PORTS = 12
-    
+    # N_ANALOG_PORTS = 6
+    # N_DIGITAL_PORTS = 12
+    N_ANALOG_PORTS = 15
+    N_DIGITAL_PORTS = 54
+
     def __init__(self, port="/dev/ttyUSB0", baudrate=57600, timeout=0.5):
         
         self.PID_RATE = 30 # Do not change this!  It is a fixed property of the Arduino PID controller.
@@ -58,7 +61,8 @@ class Arduino:
         
         # An array to cache digital sensor readings
         self.digital_sensor_cache = [None] * self.N_DIGITAL_PORTS
-    
+         
+        
     def connect(self):
         try:
             print "Connecting to Arduino on port", self.port, "..."
@@ -318,7 +322,7 @@ class Arduino:
             connected to the General Purpose I/O line pinId for a distance,
             and returns the range in cm.  Sonar distance resolution is integer based.
         '''
-        return self.execute('p %d %d' %(pin, echopin));
+        return self.execute('p %d %d' %(pin, echopin))
     
 """ Basic test for connectivity """
 if __name__ == "__main__":

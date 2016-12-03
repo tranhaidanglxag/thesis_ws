@@ -147,21 +147,24 @@ class BaseController:
             else:
                 dright = (right_enc - self.enc_right) / self.ticks_per_meter
                 dleft = (left_enc - self.enc_left) / self.ticks_per_meter
-
             self.enc_right = right_enc
             self.enc_left = left_enc
             
+             # distance traveled is the average of the two wheels 
             dxy_ave = (dright + dleft) / 2.0
+            # this approximation works (in radians) for small angles
             dth = (dright - dleft) / self.wheel_track
+             # calculate velocities
             vxy = dxy_ave / dt
             vth = dth / dt
                 
             if (dxy_ave != 0):
+                # calculate distance traveled in x and y
                 dx = cos(dth) * dxy_ave
                 dy = -sin(dth) * dxy_ave
+                 # calculate the final position of the robot
                 self.x += (cos(self.th) * dx - sin(self.th) * dy)
                 self.y += (sin(self.th) * dx + cos(self.th) * dy)
-    
             if (dth != 0):
                 self.th += dth 
     
@@ -180,7 +183,7 @@ class BaseController:
                     self.base_frame,
                     "odom"
                     )
-    
+            # publish the odom information
             odom = Odometry()
             odom.header.frame_id = "odom"
             odom.child_frame_id = self.base_frame
@@ -222,6 +225,8 @@ class BaseController:
             # Set motor speeds in encoder ticks per PID loop
             if not self.stopped:
                 self.arduino.drive(self.v_left, self.v_right)
+                '''Test '''
+                # self.arduino.drive_m_per_s(self.v_left, self.v_right)
                 
             self.t_next = now + self.t_delta
             
@@ -250,7 +255,7 @@ class BaseController:
             
         self.v_des_left = int(left * self.ticks_per_meter / self.arduino.PID_RATE)
         self.v_des_right = int(right * self.ticks_per_meter / self.arduino.PID_RATE)
-    	rospy.loginfo('v_des_left: ' + str(self.v_des_left) + 'v_des_right: ' + str(self.v_des_right))
+    	#rospy.loginfo('v_des_left: ' + str(self.v_des_left) +' '+'v_des_right: ' + str(self.v_des_right))
     def reconfig(self, config, level):
         rospy.loginfo("""Reconfigure Request: {Kp}, {Ki}, {Kd}, {Ko}, {lin_x}, {ang_z}""".format(**config))
         self.Kp = config['Kp']

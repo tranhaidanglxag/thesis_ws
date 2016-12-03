@@ -124,10 +124,6 @@ class ArduinoROS():
             elif params['type'] == 'PhidgetsCurrent':
                 sensor = PhidgetsCurrent(self.controller, name, params['pin'], params['rate'])
                 
-#                if params['type'] == "MaxEZ1":
-#                    self.sensors[len(self.sensors)]['trigger_pin'] = params['trigger_pin']
-#                    self.sensors[len(self.sensors)]['output_pin'] = params['output_pin']
-
             try:
                 self.mySensors.append(sensor)
                 rospy.loginfo(name + " " + str(params) + " published on topic " + rospy.get_name() + "/sensor/" + name)

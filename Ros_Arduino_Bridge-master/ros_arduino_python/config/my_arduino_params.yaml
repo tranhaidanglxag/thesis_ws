@@ -16,7 +16,7 @@ base_controller_rate: 10
 publish_tf: True
 
 # For a robot that uses base_footprint, change base_frame to base_footprint
-base_frame: base_footprint
+base_frame: base_link
 
 # === Robot drivetrain parameters
 # wheel_diameter: 0.146
@@ -49,7 +49,7 @@ Ko: 50
 sensors: {
   sonar_front_center:   {pin: 28, echopin: 30, type: Ping, rate: 10,frame_id: 1},
   sonar_left_center:   {pin: 34, echopin: 36, type: Ping, rate: 10,frame_id: 2},
-  sonar_right_center:   {pin: 46, echopin: 48, type: Ping, rate: 10,frame_id: 3},
+  sonar_right_center:   {pin: 46, echopin: 48, type: Ping, rate: 10,frame_id: 3}
 
   # sonar_front_center:   {pin: 28, echopin: 30, type: PointCloudPing, rate: 5, frame_id: 1},
   # sonar_left_center:   {pin: 34, echopin: 36, type: PointCloudPing, rate: 5,frame_id: 2},
