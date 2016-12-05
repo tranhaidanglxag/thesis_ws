@@ -199,6 +199,20 @@ int runCommand() {
   }
       }
 
+//SetupEncoders() Definition
+
+void setupEncoders(){
+  //Right encoder initialization
+   pinMode(RIGHT_PIN_A, INPUT_PULLUP);// sets pin A as input 
+   pinMode(RIGHT_PIN_B, INPUT_PULLUP);// sets pin B as input 
+   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN_A), doRightEncoder, RISING); //Attaching interrupt in Right_Enc_PinA.
+  //Left encoder initialization
+   pinMode(LEFT_PIN_A, INPUT_PULLUP);// sets pin A as input 
+   pinMode(LEFT_PIN_B, INPUT_PULLUP);// sets pin B as input 
+   attachInterrupt(digitalPinToInterrupt(LEFT_PIN_A), doLeftEncoder, RISING); //Attaching interrupt in Left_Enc_PinA.
+  
+}
+
 /* Setup function--runs once at startup. */
 void setup() {
   Serial.begin(BAUDRATE);
@@ -206,16 +220,11 @@ void setup() {
 
 // Initialize the motor controller if used */
 #ifdef USE_BASE
-
+   setupEncoders();
    initMotorController();
    resetPID();
-   //Encoder initialization
-   pinMode(RIGHT_PIN_A, INPUT_PULLUP);
-   pinMode(RIGHT_PIN_B, INPUT_PULLUP);
-   pinMode(LEFT_PIN_A, INPUT_PULLUP);
-   pinMode(LEFT_PIN_B, INPUT_PULLUP);
-   attachInterrupt(digitalPinToInterrupt(LEFT_PIN_A), doLeftEncoder, RISING);
-   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN_A), doRightEncoder, RISING);
+
+   
 
 #endif
 }

@@ -1,7 +1,7 @@
 #include "IBT2MotorShield.h"
 
 // Constructors ////////////////////////////////////////////////////////////////
-// LEFT:1 RIGHT:2
+// LEFT MOTOR:1 RIGHT MOTOR :2
 IBT2MotorShield::IBT2MotorShield()
 {
   //Pin map

@@ -11,7 +11,7 @@ rate: 50
 sensor_state_rate: 10
 
 use_base_controller: True
-base_controller_rate: 10
+base_controller_rate: 30
 
 publish_tf: True
 

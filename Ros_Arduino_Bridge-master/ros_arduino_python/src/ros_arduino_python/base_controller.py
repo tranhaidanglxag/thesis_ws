@@ -224,10 +224,18 @@ class BaseController:
             
             # Set motor speeds in encoder ticks per PID loop
             if not self.stopped:
-                self.arduino.drive(self.v_left, self.v_right)
+                # self.arduino.drive(self.v_left, self.v_right)
                 '''Test '''
-                # self.arduino.drive_m_per_s(self.v_left, self.v_right)
+                left_revs_per_second = float(self.v_left) / (self.wheel_diameter * pi)
+                right_revs_per_second = float(self.v_right) / (self.wheel_diameter * pi)
+
+                left_ticks_per_loop = int(left_revs_per_second * self.encoder_resolution * self.arduino.PID_INTERVAL * self.gear_reduction)
+                right_ticks_per_loop  = int(right_revs_per_second * self.encoder_resolution * self.arduino.PID_INTERVAL * self.gear_reduction)
+
+                self.arduino.drive(left_ticks_per_loop,left_ticks_per_loop)
+                rospy.loginfo('drive: ' + str(left_ticks_per_loop) +" " + str(right_ticks_per_loop))
                 
+               
             self.t_next = now + self.t_delta
             
     def stop(self):
@@ -255,7 +263,7 @@ class BaseController:
             
         self.v_des_left = int(left * self.ticks_per_meter / self.arduino.PID_RATE)
         self.v_des_right = int(right * self.ticks_per_meter / self.arduino.PID_RATE)
-    	#rospy.loginfo('v_des_left: ' + str(self.v_des_left) +' '+'v_des_right: ' + str(self.v_des_right))
+    	# rospy.loginfo('x ' + str(x) +' '+'v_des_right: ' + str(self.v_des_right))
     def reconfig(self, config, level):
         rospy.loginfo("""Reconfigure Request: {Kp}, {Ki}, {Kd}, {Ko}, {lin_x}, {ang_z}""".format(**config))
         self.Kp = config['Kp']
